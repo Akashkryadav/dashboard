@@ -1,8 +1,9 @@
 import { FaBars, FaBell, FaSearch, FaUserCircle } from "react-icons/fa"
+import { Link } from "react-router-dom"
 const Navbar = () => {
   return (
-    <nav className="bg-gray-800 px-4 py-3 flex justify-between ml-28">
-      <div className="flex items-center text-xl">
+    <nav className="bg-gray-800 px-4 py-3 flex justify-between ml-24  ">
+      <div className="flex items-center text-xl  ">
 <FaBars className='text-white me-4 cursor-pointer'/>
 <span className=" text-white font-semibold">AVOD Dashboard</span>
       </div>
@@ -24,9 +25,9 @@ const Navbar = () => {
             <FaUserCircle className="w-6 h-6 mt-1"/>
             <div className="z-10 hidden absolute bg-white rounded-lg shadow w-32 group-focus:block top-full right-0">
                 <ul className="py-2 text-sm text-gray-950 ">
-                    <li><a href="">Profile</a></li>
-                    <li><a href="">Setting</a></li>
-                    <li><a href="">Log Out</a></li>
+                    <li><Link to="/profile">Profile</Link></li>
+                    <li><Link to="/setting">Setting</Link></li>
+                    <li><Link to="/log out">Log Out</Link></li>
                 </ul>
             </div>
         </button>
