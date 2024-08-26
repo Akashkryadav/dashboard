@@ -2,15 +2,13 @@
 // eslint-disable-next-line no-undef
 const mongoose = require('mongoose');
 
-const dataSchema = new mongoose.Schema({
-    assetName:'String',
-    titleName:'String',
-    tvModel2024: 'string',
-    tvModel2023: 'string',
-    tvModel2017: 'string',
-    tab: 'string',
-
+const formDataSchema = new mongoose.Schema({
+    assetName: { type: String, required: true },
+    seriesTitle: { type: String, required: true },
+    ticketId: { type: String, required: true },
+    targetDate: { type: Date, required: true }
 });
-const data = mongoose.model('data', dataSchema)
 
-module.exports = data
+const FormData = mongoose.model('FormData', formDataSchema);
+
+module.exports = FormData;

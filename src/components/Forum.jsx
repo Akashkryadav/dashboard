@@ -1,64 +1,118 @@
+import  { useState, useEffect } from 'react';
 
-
-// const Forum = () => {
-//   return (
-//     <div className=" flex justify-center">
-//       forum 
-//     </div>
-//   )
-// }
-
-// export default Forum
-
-
-import  { useState } from "react";
-
-
-function DataForm() {
-  const [formData, setFormData] = useState({
-    assetName: "",
-    titleName: "",
-    tvModel2024: "",
-    tvModel2023: "",
-    tvModel2017: "",
-    tab: ""
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+const Forum = () => {
+    // Initialize state to store current form input values
+    const [formFields, setFormFields] = useState({
+        assetName: '',
+        seriesTitle: '',
+        ticketId: '',
+        targetDate: ''
     });
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/widget/data", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    if (response.ok) {
-      alert("Data saved successfully!");
-    } else {
-      alert("Failed to save data.");
-    }
-  };
+    // Initialize state to store submitted data
+    const [submittedData, setSubmittedData] = useState([]);
 
-  return (
-    <><form onSubmit={handleSubmit}>
-      <input type="text" name="assetName" value={formData.assetName} onChange={handleChange} placeholder="Asset Name" />
-      <input type="text" name="titleName" value={formData.titleName} onChange={handleChange} placeholder="Title Name" />
-      <input type="text" name="tvModel2024" value={formData.tvModel2024} onChange={handleChange} placeholder="TV Model 2024" />
-      <input type="text" name="tvModel2023" value={formData.tvModel2023} onChange={handleChange} placeholder="TV Model 2023" />
-      <input type="text" name="tvModel2017" value={formData.tvModel2017} onChange={handleChange} placeholder="TV Model 2017" />
-      <input type="text" name="tab" value={formData.tab} onChange={handleChange} placeholder="Tab" />
-      <button type="submit">Submit</button>
-    </form></>
-  );
-  
-}
+    useEffect(() => {
+        // Fetch data from the backend on component mount using fetch
+        fetch('http://localhost:5000/api/forms')
+            .then(response => response.json())
+            .then(data => setSubmittedData(data))
+            .catch(error => console.log(error));
+    }, []);
 
-export default DataForm;
+    // Handle input change
+    const handleInputChange = (event) => {
+        setFormFields({
+            ...formFields,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    // Handle form submission
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        fetch('http://localhost:5000/api/forms', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formFields),
+        })
+            .then(response => response.json())
+            .then(data => {
+                setSubmittedData([...submittedData, data]);
+                setFormFields({
+                    assetName: '',
+                    seriesTitle: '',
+                    ticketId: '',
+                    targetDate: ''
+                });
+            })
+            .catch(error => console.log(error));
+    };
+
+    return (
+        <div>
+            <h1>Dynamic Form</h1>
+            <form onSubmit={handleSubmit} style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px' }}>
+                <input
+                    type="text"
+                    name="assetName"
+                    placeholder="Asset Name"
+                    value={formFields.assetName}
+                    onChange={handleInputChange}
+                    style={{ marginRight: '5px' }}
+                />
+                <input
+                    type="text"
+                    name="seriesTitle"
+                    placeholder="Series Title"
+                    value={formFields.seriesTitle}
+                    onChange={handleInputChange}
+                    style={{ marginRight: '5px' }}
+                />
+                <input
+                    type="text"
+                    name="ticketId"
+                    placeholder="Ticket ID"
+                    value={formFields.ticketId}
+                    onChange={handleInputChange}
+                    style={{ marginRight: '5px' }}
+                />
+                <input
+                    type="date"
+                    name="targetDate"
+                    placeholder="Target Date"
+                    value={formFields.targetDate}
+                    onChange={handleInputChange}
+                    style={{ marginRight: '5px' }}
+                />
+                <button type="submit">Add Data</button>
+            </form>
+
+            <h2>Submitted Data</h2>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+                <thead>
+                    <tr>
+                        <th style={{ border: '1px solid #ccc', padding: '8px' }}>Asset Name</th>
+                        <th style={{ border: '1px solid #ccc', padding: '8px' }}>Series Title</th>
+                        <th style={{ border: '1px solid #ccc', padding: '8px' }}>Ticket ID</th>
+                        <th style={{ border: '1px solid #ccc', padding: '8px' }}>Target Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {submittedData.map((form, index) => (
+                        <tr key={index}>
+                            <td style={{ border: '1px solid #ccc', padding: '8px' }}>{form.assetName || 'N/A'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '8px' }}>{form.seriesTitle || 'N/A'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '8px' }}>{form.ticketId || 'N/A'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '8px' }}>{form.targetDate || 'N/A'}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+export default Forum;

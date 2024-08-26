@@ -75,7 +75,7 @@ const Home = () => {
         {widgets.map((widget, index) => (
           <div key={index}>
             <Widget title={widget.title} content={widget.content} />
-            <button onClick={() => handleEdit(index)}>Edit</button>
+            <button onClick={() => handleEdit(index)}className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500'>Edit</button>
           </div>
         ))}
       </div>
@@ -87,6 +87,7 @@ const Home = () => {
           onChange={(e) => setNewWidget({ ...newWidget, title: e.target.value })}
           placeholder="Title"
           required
+          
         />
         <input
           type="number"
@@ -95,7 +96,7 @@ const Home = () => {
           placeholder="Content"
           required
         />
-        <button type="submit">{isEditing ? 'Update' : 'Add'} Widget</button>
+        <button type="submit"className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500'>{isEditing ? 'Update' : 'Add'} Widget</button>
       </form>
     </div>
     <div className="m-40">

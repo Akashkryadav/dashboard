@@ -6,6 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const widgetRoutes = require('./routes/widgetRoutes');
+const Forum = require('./routes/ForumRoute');
 const app = express();
 
 // MongoDB connection
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api/widgets', widgetRoutes);
+app.use('/api/forms',Forum)
 
 // Start server
 app.listen(5000, () => {
